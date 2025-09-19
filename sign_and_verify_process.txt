@@ -1,0 +1,39 @@
+// Pseudocodice di cosa fa Ed25519 internamente:
+
+// FIRMA:
+fn ed25519_sign(message: &[u8], private_key: &[u8; 32]) -> [u8; 64] {
+    // 1. Genera un "nonce" casuale dal messaggio e chiave
+    let r = hash(private_key_part + message);
+    
+    // 2. Calcola R = r * G (moltiplicazione su curva ellittica)
+    let R = scalar_multiply(r, GENERATOR_POINT);
+    
+    // 3. Calcola challenge: e = hash(R + public_key + message)  
+    let e = hash(R + public_key + message);
+    
+    // 4. Calcola s = r + e * private_key (aritmetica modulare)
+    let s = (r + e * private_key) % CURVE_ORDER;
+    
+    // 5. Firma = (R, s)
+    return [R.to_bytes(), s.to_bytes()].concat();
+}
+
+// VERIFICA:
+fn ed25519_verify(message: &[u8], signature: &[u8; 64], public_key: &[u8; 32]) -> bool {
+    // 1. Estrae R e s dalla firma
+    let (R, s) = signature.split();
+    
+    // 2. Ricalcola challenge: e = hash(R + public_key + message)
+    let e = hash(R + public_key + message);
+    
+    // 3. Verifica: s * G = R + e * public_key
+    let left = scalar_multiply(s, GENERATOR_POINT);
+    let right = point_add(R, scalar_multiply(e, public_key));
+    
+    return left == right;  // ← Se uguali, firma valida!
+}
+
+1. GENERAZIONE: generate_keypair() → SigningKey
+2. ESTRAZIONE: get_public_key() → VerifyingKey  
+3. FIRMA: sign_message() → Signature
+4. VERIFICA: verify_signature() → bool
