@@ -1,6 +1,7 @@
 use sha3::{Digest, Sha3_256};
 use hex;
 
+//TODO Vec di ritorno non è necessario sapendo che sarà sempre 32 quindi si potrebbe modificare con [u8;32]
 pub fn hash_message(m : &[u8]) -> Vec<u8> {
 	let mut hasher = Sha3_256::new();
     hasher.update(m);
@@ -46,5 +47,30 @@ mod tests {
 
         let decoded = hex_to_bytes(&hex_string).unwrap();
         assert_eq!(hash, decoded);
+    }
+
+    #[test]
+        fn test_hex_conversion_trait() {
+        let hasher = Sha3Hasher;
+        let m = b"test";
+        let hash = hasher.hash(m);
+        let hex_string = hasher.read_hash(&hash);
+
+        assert_eq!(hex_string.len(), 64);
+        assert!(hex_string.chars().all(|c| c.is_ascii_hexdigit()));
+    }
+
+}
+
+use crate::crypto::traits::BlockchainHasher;
+
+pub struct Sha3Hasher;
+
+impl BlockchainHasher for Sha3Hasher {
+    fn hash(&self, message: &[u8]) -> Vec<u8> {
+        hash_message(message)
+    }
+    fn read_hash(&self, hash: &[u8]) -> String {
+        hash_to_hex(hash)
     }
 }
