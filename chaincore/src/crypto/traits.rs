@@ -1,3 +1,4 @@
+
 pub trait BlockchainSigner {
     type PrivateKey;
     type PublicKey;
@@ -11,6 +12,8 @@ pub trait BlockchainSigner {
 }
 
 pub trait BlockchainHasher {
-    fn hash(&self, message: &[u8]) -> Vec<u8>;
-    fn read_hash(&self, message: &[u8]) -> String;
+    type Output;
+    
+    fn hash(&self, message: &[u8]) -> Self::Output;
+    fn hash_hex(&self, message: &[u8]) -> String;
 }

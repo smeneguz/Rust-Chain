@@ -53,8 +53,7 @@ mod tests {
         fn test_hex_conversion_trait() {
         let hasher = Sha3Hasher;
         let m = b"test";
-        let hash = hasher.hash(m);
-        let hex_string = hasher.read_hash(&hash);
+        let hex_string = hasher.hash_hex(m);
 
         assert_eq!(hex_string.len(), 64);
         assert!(hex_string.chars().all(|c| c.is_ascii_hexdigit()));
@@ -67,10 +66,15 @@ use crate::crypto::traits::BlockchainHasher;
 pub struct Sha3Hasher;
 
 impl BlockchainHasher for Sha3Hasher {
-    fn hash(&self, message: &[u8]) -> Vec<u8> {
-        hash_message(message)
+    type Output = [u8; 32]; // it will be alwasys 32 bytes
+
+    fn hash(&self, message: &[u8]) -> Self::Output {
+        let mut hasher = Sha3_256::new();
+        hasher.update(message);
+        hasher.finalize().into()
     }
-    fn read_hash(&self, hash: &[u8]) -> String {
-        hash_to_hex(hash)
+
+    fn hash_hex(&self, message: &[u8]) -> String {
+        hex::encode(self.hash(message).as_ref())
     }
 }
