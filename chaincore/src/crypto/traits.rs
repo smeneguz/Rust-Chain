@@ -19,7 +19,7 @@ pub trait BlockchainHasher {
 }
 
 //  Estensione per "tagged hash" (BIP‑340/341): H( H(tag) || H(tag) || msg )
-pub trait TaggedBlockchainHasher {
+pub trait TaggedBlockchainHasher: BlockchainHasher {
     fn hash_tagged(&self, tag: &'static [u8], msg: &[u8]) -> Self::Output;
 }
 
