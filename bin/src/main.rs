@@ -5,6 +5,7 @@ use chaincore::Ed25519Signer;
 
 
 fn main() {
+
     println!("Hello, world!");
     let m = "test hash function";
     let hash = hash_string(m);
@@ -42,5 +43,6 @@ fn main() {
         panic!("mannaggia");
     }
 
-
+    
+    
 }
