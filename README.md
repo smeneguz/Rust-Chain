@@ -69,3 +69,20 @@ e idea di blocco , pub struct Block con campi corretti
 iniziare a pensare a questo modello UTXO , c abozzare modulo transaction dove abozziamo prototipale transaction 
 transaction.rs
 #derive (debug, Clone, ...) 
+
+
+Gian:
+
+Transaction input : struttura con previous_tx_hash, output_index, signature, public_key
+
+
+hashmap metterò più avanti nel modulo blockchain 
+
+BLOCCO MODULO DA FARE adesso e prossimo modulo blockchain
+
+blocco e blockchain by Gian: 
+blocco: index, hash, previous_block_hash, timestamp, transaction, author, signature, metadata
+
+hash di tutto 
+
+blockcahin: 

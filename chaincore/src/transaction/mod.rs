@@ -1,4 +1,2 @@
-pub mod utxo;
-pub use utxo::*;
-
-pub mod traits;
+pub mod transaction;
+pub use transaction::*;

@@ -44,7 +44,7 @@ mod tests {
     }
 }
 
-use crate::crypto::traits::BlockchainSigner;
+use crate::crypto::crypto::BlockchainSigner;
 pub struct Ed25519Signer;
 
 impl BlockchainSigner for Ed25519Signer {
@@ -67,5 +67,41 @@ impl BlockchainSigner for Ed25519Signer {
 
     fn verify(&self,public_key: &Self::PublicKey, message:&[u8], sign: &Self::Signature) -> bool {
         verify_signature(sign, public_key, message)
+    }
+}
+
+use crate::crypto::crypto::CryptoEncoding;
+
+//errori Codec
+#[derive(Debug)]
+pub enum Ed25519CodecError {
+    InvalidPublicKeyLength,
+    InvalidSignatureLength,
+    Dalek(SignatureError),
+}
+
+impl CryptoEncoding for Ed25519Signer {
+    type PublicKey = VerifyingKey;
+    type Signature = Signature;
+    type Error= Ed25519CodecError;
+
+    fn pk_to_bytes(&self, pk: &Self::PublicKey) -> Vec<u8> {
+        pk.to_bytes().to_vec()
+    }
+
+    fn pk_from_bytes(&self, b: &[u8]) -> Result<Self::PublicKey, Self::Error> {
+        use core::convert::TryInto;
+        let arr: [u8; 32] = b.try_into().map_err(|_| Ed25519CodecError::InvalidPublicKeyLength)?;
+        VerifyingKey::from_bytes(&arr).map_err(Ed25519CodecError::Dalek)
+    }
+
+    fn sig_to_bytes(&self, sig: Self::Signature) -> Vec<u8> {
+        sig.to_bytes().to_vec() // 64 bytes
+    }
+
+    fn sig_from_bytes(&self, b: &[u8]) -> Result<Self::Signature, Self::Error> {
+        use core::convert::TryInto;
+        let arr: [u8; 64] = b.try_into().map_err(|_| Ed25519CodecError::InvalidSignatureLength)?;
+        Ok(Signature::from_bytes(&arr))
     }
 }

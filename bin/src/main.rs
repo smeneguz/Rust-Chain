@@ -1,7 +1,9 @@
 use chaincore::crypto::{hash_string, hash_to_hex};
 use chaincore::crypto::{sign_message, generate_keypair, verify_signature, get_public_key};
-use chaincore::crypto::BlockchainSigner;
-use chaincore::Ed25519Signer;
+use chaincore::BlockchainSigner;
+
+// Usa il signer di default dalla configurazione
+use chaincore::SIGNER;
 
 
 fn main() {
@@ -24,18 +26,17 @@ fn main() {
 
     println!("test verifica: {}", try_verify);
 
-    // test con trait
-    let signer = Ed25519Signer;
+    // test con trait - USA SIGNER dalla configurazione
     let m2 = b"test implementazione tramite trait agnostico riguardo l'algoritmo di firma digitale";
-    let my_key = signer.generate();
-    let pub_key = signer.get_public_key(&my_key);
+    let my_key = SIGNER.generate();
+    let pub_key = SIGNER.get_public_key(&my_key);
     println!("pub key con trait {:#?}", &pub_key);
 
-    let sign_m = signer.sign(&my_key, m2).unwrap();
+    let sign_m = SIGNER.sign(&my_key, m2).unwrap();
 
     println!("vediamo cosa c'è dentro alla sign {:?}", &sign_m);
 
-    let is_valid_sign = signer.verify(&pub_key, m2, &sign_m);
+    let is_valid_sign = SIGNER.verify(&pub_key, m2, &sign_m);
 
     println!("boool vediamo {}", is_valid_sign);
     

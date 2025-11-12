@@ -42,7 +42,7 @@ mod tests {
     }
 }
 
-use crate::crypto::traits::{BlockchainHasher, TaggedBlockchainHasher};
+use crate::crypto::crypto::{BlockchainHasher, TaggedBlockchainHasher};
 
 /// Hasher SHA3-256
 pub struct Sha3Hasher;

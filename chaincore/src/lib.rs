@@ -1,45 +1,21 @@
 pub mod crypto;
 pub mod transaction;
+pub mod block;
+pub mod blockchain;
+pub mod config;
 
-pub use crypto::traits::{BlockchainSigner, BlockchainHasher};
+// Re-export crypto traits
+pub use crypto::crypto::{BlockchainSigner, BlockchainHasher, TaggedBlockchainHasher, CryptoEncoding};
 
-// Ed25519 Implementation
-pub use crypto::ed25519::{
-    Ed25519Signer,
-    generate_keypair,
-    get_public_key,
-    sign_message,
-    verify_signature,
-};
+// Re-export transaction types
+pub use transaction::transaction::{OutPoint, TxInput, TxOutput, Transaction, TxCodec, Sighash, UtxoView};
 
-// SHA3 Implementation
-pub use crypto::sha3::{
-    Sha3Hasher,
-    hash_message,
-    hash_string,
-    hash_to_hex,
-    hash_message_hex,
-    hash_string_hex,
-    hex_to_bytes,
-};
+// Re-export block types
+pub use block::Block;
 
-// Transaction Traits
-pub use transaction::traits::{
-    TransactionModel,
-    TransactionOutputModel,
-    TransactionInputModel,
-};
+// Re-export blockchain types
+pub use blockchain::{Blockchain, UtxoSet};
 
-// UTXO Implementation
-pub use transaction::utxo::{
-    UtxoOutput,
-    // UtxoInput,        // TODO: Implementare
-    // UtxoTransaction,  // TODO: Implementare
-};
+// Re-export configuration (type alias configurabili)
+pub use config::{DefaultSigner, DefaultHasher, PrivateKey, PublicKey, Signature, HashOutput, SIGNER, HASHER};
 
-// UTXO Helper Functions
-pub use transaction::utxo::output::{
-    create_output,
-    is_output_owned_by,
-    output_to_bytes,
-};
