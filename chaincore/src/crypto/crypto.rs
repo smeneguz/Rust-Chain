@@ -12,8 +12,12 @@ pub trait BlockchainSigner {
 }
 
 pub trait BlockchainHasher {
+    type Hasher;
     type Output;
-    
+    fn init(&self) -> Self::Hasher;
+    fn update
+    fn finalize
+
     fn hash(&self, message: &[u8]) -> Self::Output;
     fn hash_hex(&self, message: &[u8]) -> String;
 }

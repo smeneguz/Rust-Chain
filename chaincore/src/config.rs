@@ -1,16 +1,16 @@
-
 // "type alias" per gli algoritmi crittografici
 
 use crate::crypto::{Ed25519Signer, Sha3Hasher};
+use crate::crypto::*;
 
 //TODO Alternative future: Secp256k1, Schnorr, Dilithium (post-quantum)
 pub type DefaultSigner = Ed25519Signer;
 pub type DefaultHasher = Sha3Hasher;
 
-pub type PrivateKey = <DefaultSigner as crate::crypto::BlockchainSigner>::PrivateKey;
-pub type PublicKey = <DefaultSigner as crate::crypto::BlockchainSigner>::PublicKey;
-pub type Signature = <DefaultSigner as crate::crypto::BlockchainSigner>::Signature;
-pub type HashOutput = <DefaultHasher as crate::crypto::BlockchainHasher>::Output;
+pub type PrivateKey = <DefaultSigner as BlockchainSigner>::PrivateKey;
+pub type PublicKey = <DefaultSigner as BlockchainSigner>::PublicKey;
+pub type Signature = <DefaultSigner as BlockchainSigner>::Signature;
+pub type HashOutput = <DefaultHasher as BlockchainHasher>::Output;
 
 
 // Istanza globale del signer

@@ -86,3 +86,6 @@ blocco: index, hash, previous_block_hash, timestamp, transaction, author, signat
 hash di tutto 
 
 blockcahin: 
+
+libp2p2:
+i nodi devono scoprirsi dht che utilizza la rete torrent
